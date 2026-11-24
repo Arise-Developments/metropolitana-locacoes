@@ -8,6 +8,7 @@ import { CarArt } from "@/components/CarArt";
 import { LocationSection } from "@/components/LocationSection";
 import { cars, categories } from "@/data/cars";
 import { site } from "@/config/site";
+import { simulador } from "@/config/simulador";
 import { brl } from "@/lib/pricing";
 import { whatsappLink } from "@/lib/whatsapp";
 
@@ -29,8 +30,8 @@ const faq = [
   { q: "Quais documentos preciso para alugar?", a: "CNH válida (definitiva), documento com foto e cartão de crédito em nome do condutor para a caução. Confirme as regras atuais com nosso atendimento." },
   { q: "Existe idade mínima?", a: "Sim. Consulte nosso atendimento para conhecer as regras de idade e tempo de habilitação de cada categoria." },
   { q: "Posso devolver o carro antes?", a: "Pode. A diferença de valores é calculada conforme a política vigente — fale com a gente antes da devolução." },
-  { q: "Como funcionam os planos semanal e mensal?", a: `Locações a partir de 7 diárias têm ${site.pricing.weeklyDiscount * 100}% de desconto, e a partir de 30 diárias, ${site.pricing.monthlyDiscount * 100}%. O desconto é aplicado automaticamente no simulador.` },
-  { q: "Vocês entregam o carro no meu endereço?", a: `Sim, mediante taxa de ${brl(site.pricing.deliveryFee)} e disponibilidade na região. Selecione a opção na reserva.` },
+  { q: "Existe desconto para mais dias?", a: `Sim, o desconto é progressivo: ${simulador.descontosDuracao.map((d) => `${d.pct}% a partir de ${d.minDias} diárias`).join(", ")}. Para uso contínuo, a locação mensal tem planos com até ${Math.round(Math.max(...simulador.planosMensais.map((p) => p.discount)) * 100)}% de desconto. Tudo é calculado automaticamente no simulador.` },
+  { q: "Vocês entregam o carro no meu endereço?", a: "Sim, mediante taxa e disponibilidade na região. Selecione a opção nos serviços adicionais do simulador." },
 ];
 
 export default function HomePage() {
@@ -129,11 +130,10 @@ export default function HomePage() {
       <section id="planos" className="scroll-mt-20 bg-navy-900 py-20 lg:py-28">
         <div className="container-x">
           <SectionHeading tone="dark" eyebrow="Planos" title="Pague pelo tempo que você precisa." text="Quanto mais dias, menor o valor da diária. O desconto é aplicado automaticamente na sua reserva." />
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-2">
             {[
-              { name: "Diária", tag: "1 a 6 dias", discount: 0, text: "Para compromissos, viagens curtas e imprevistos.", items: ["Retirada no mesmo dia", "Sem fidelidade", "Proteção opcional"] },
-              { name: "Semanal", tag: "7 a 29 dias", discount: site.pricing.weeklyDiscount, text: "Para férias, viagens de trabalho e temporadas.", items: ["Diária reduzida", "Troca de veículo sob consulta", "Proteção opcional"], featured: true },
-              { name: "Mensal", tag: "30 dias ou mais", discount: site.pricing.monthlyDiscount, text: "Para quem precisa de carro todo dia sem comprar um.", items: ["Maior desconto", "Manutenção inclusa", "Ideal para apps e empresas"] },
+              { name: "Diária", tag: "1 a 29 dias", discount: Math.max(0, ...simulador.descontosDuracao.filter((d) => d.minDias < 30).map((d) => d.pct)), prefix: "até ", text: "Para compromissos, viagens, férias e temporadas.", items: ["Desconto progressivo a partir de 3 dias", "Sem fidelidade", "Proteção opcional"], featured: false },
+              { name: "Mensal", tag: "30 dias ou mais", discount: Math.round(Math.max(...simulador.planosMensais.map((p) => p.discount)) * 100), prefix: "até ", href: "/reserva?modo=mensal", text: "Para quem precisa de carro todo dia sem comprar um.", items: ["Maior desconto", "Manutenção inclusa", "Ideal para apps e empresas"] },
             ].map((plan) => (
               <div key={plan.name} className={`relative flex flex-col border p-8 ${plan.featured ? "border-sky-400 bg-navy-800" : "border-white/10"}`}>
                 {plan.featured && <span className="eyebrow absolute -top-3 left-8 bg-sky-400 px-3 py-1 text-[10px] text-navy-900">Mais escolhido</span>}
@@ -141,15 +141,15 @@ export default function HomePage() {
                 <h3 className="font-display mt-3 text-3xl font-bold text-white">{plan.name}</h3>
                 <p className="mt-2 text-sm text-white/60">{plan.text}</p>
                 <p className="font-display mt-6 text-4xl font-extrabold text-white">
-                  {plan.discount ? `-${plan.discount * 100}%` : "Tarifa cheia"}
+                  {plan.discount ? `${plan.prefix}-${plan.discount}%` : "Tarifa cheia"}
                 </p>
-                <p className="text-xs text-white/50">{plan.discount ? "sobre o valor da diária" : "valor padrão da categoria"}</p>
+                <p className="text-xs text-white/50">{plan.discount ? (plan.href ? "nos planos mensais" : "sobre o valor da diária") : "valor padrão da categoria"}</p>
                 <ul className="mt-6 flex-1 space-y-3 text-sm text-white/80">
                   {plan.items.map((i) => (
                     <li key={i} className="flex gap-2"><Check className="size-4 shrink-0 text-sky-400" />{i}</li>
                   ))}
                 </ul>
-                <Link href="/reserva" className={`mt-8 ${plan.featured ? "btn-primary" : "btn-outline-light"}`}>Simular</Link>
+                <Link href={plan.href ?? "/reserva"} className={`mt-8 ${plan.featured ? "btn-primary" : "btn-outline-light"}`}>Simular</Link>
               </div>
             ))}
           </div>

@@ -15,7 +15,8 @@ npm start        # serve o build
 
 | O quê | Arquivo |
 |---|---|
-| Contato, endereço, mapa, horários, descontos e extras | `src/config/site.ts` |
+| Contato, endereço, mapa e horários | `src/config/site.ts` |
+| Simulador: descontos, fim de semana, km, proteções, adicionais, planos mensais, taxa e caução | `src/config/simulador.ts` |
 | Frota e categorias | `src/data/cars.ts` |
 | Textos da página inicial e perguntas frequentes | `src/app/page.tsx` |
 | Cores e fontes | `src/app/globals.css` (bloco `@theme`) |

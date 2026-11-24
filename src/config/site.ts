@@ -2,8 +2,6 @@
  * Configuração central do site.
  * Tudo que é "dado da empresa" fica aqui — preencha antes de publicar.
  */
-export type ExtraId = "protecao" | "condutor" | "cadeirinha";
-
 type SiteConfig = {
   name: string;
   shortName: string;
@@ -12,8 +10,6 @@ type SiteConfig = {
   url: string;
   contact: { whatsapp: string; phone: string; email: string; hours: { days: string; time: string }[] };
   store: { address: string; city: string; location: { lat: number; lng: number; configured: boolean } };
-  pricing: { weeklyDiscount: number; monthlyDiscount: number; deliveryFee: number };
-  extras: { id: ExtraId; name: string; description: string; pricePerDay: number }[];
 };
 
 export const site: SiteConfig = {
@@ -46,16 +42,5 @@ export const site: SiteConfig = {
     location: { lat: -15.7801, lng: -47.9292, configured: false },
   },
 
-  /** Regras comerciais usadas no simulador de reserva (valores de exemplo). */
-  pricing: {
-    weeklyDiscount: 0.1, // a partir de 7 diárias
-    monthlyDiscount: 0.25, // a partir de 30 diárias
-    deliveryFee: 60, // entrega/retirada no endereço do cliente
-  },
-
-  extras: [
-    { id: "protecao", name: "Proteção completa", description: "Reduz a coparticipação em caso de sinistro.", pricePerDay: 39.9 },
-    { id: "condutor", name: "Condutor adicional", description: "Mais uma pessoa autorizada a dirigir.", pricePerDay: 15 },
-    { id: "cadeirinha", name: "Cadeirinha infantil", description: "Bebê conforto ou assento de elevação.", pricePerDay: 12 },
-  ],
+  // Preços e regras do simulador de orçamento: src/config/simulador.ts
 };

@@ -29,7 +29,7 @@ O site em Next.js mantém a identidade visual do modelo e expande o conteúdo pa
 1. **Busca rápida**: retirada, devolução e categoria, que levam direto para a reserva.
 2. **Faixa de benefícios**: carros revisados, do dia ao mês, assistência e sem burocracia.
 3. **Categorias**: Econômico, Compacto, Sedan, SUV, Executivo e Utilitário, com o preço "a partir de".
-4. **Planos**: Diária, Semanal (-10%) e Mensal (-25%).
+4. **Planos**: Diária (desconto progressivo até 15%) e Mensal (até 20% nos planos mensais).
 5. **Como funciona**: os 4 passos da reserva.
 6. **Frota em destaque**.
 7. **Perguntas frequentes** (acordeão).
@@ -39,8 +39,8 @@ O site em Next.js mantém a identidade visual do modelo e expande o conteúdo pa
 | Rota | Tela |
 |---|---|
 | `/frota` | Catálogo com busca, filtros por categoria, câmbio e diária máxima, ordenação por preço e estado vazio. Os filtros ficam na URL, então o link pode ser compartilhado. |
-| `/frota/[id]` | Detalhes do carro: ficha técnica, itens de série, valor por diária nos planos diário, semanal e mensal, botões de reserva e WhatsApp e carros semelhantes. |
-| `/reserva` | **Reserva em 4 etapas**: período e local (loja ou entrega), veículo, proteção e extras, dados do cliente. O resumo e o valor estimado aparecem em tempo real. Cada etapa é validada (datas no passado, devolução antes da retirada, telefone etc.). No fim, o pedido formatado é enviado pelo WhatsApp. |
+| `/frota/[id]` | Detalhes do carro: ficha técnica, itens de série, valor da diária em cada faixa de desconto, botões de reserva e WhatsApp e carros semelhantes. |
+| `/reserva` | **Simulador de locação** no mesmo formato de locarmetropolitana.com.br/simulador.html: abas **Diária** e **Mensal**, 6 etapas (Período/Plano, Veículo, Km, Proteção, Adicionais, Orçamento), desconto progressivo, acréscimo de fim de semana, fração por hora extra, alta temporada, taxa de locação e caução. No fim: enviar pelo WhatsApp (com captura opcional de nome e telefone), baixar em PDF, gerar link compartilhável e novo orçamento. |
 | `/contato` | Formulário (nome, telefone, assunto e mensagem) enviado pelo WhatsApp, mais a seção de localização. |
 | `/entrar` | Área do cliente (destino do ícone de usuário). Por enquanto avisa que está "em breve" e direciona ao WhatsApp, porque uma área com login exige back-end. |
 | 404 | Página de erro personalizada. |
@@ -48,7 +48,7 @@ O site em Next.js mantém a identidade visual do modelo e expande o conteúdo pa
 ## Melhorias técnicas
 
 - **Next.js 15 (App Router) + TypeScript + Tailwind CSS 4.**
-- **Configuração central** em `src/config/site.ts`: WhatsApp, telefone, e-mail, endereço, coordenadas, horários, descontos, taxa de entrega e extras.
+- **Configuração central** em `src/config/site.ts`: WhatsApp, telefone, e-mail, endereço, coordenadas, horários. Regras e preços do simulador em `src/config/simulador.ts`.
 - **Frota** em `src/data/cars.ts`: para adicionar, remover ou alterar um carro, basta editar a lista.
 - **SEO**: título e descrição por página, Open Graph, `sitemap.xml` e `robots.txt` gerados automaticamente, e páginas dos carros pré-renderizadas.
 - **Acessibilidade**: link "Pular para o conteúdo", foco visível, rótulos nos campos, mensagens de erro com `role="alert"` e `aria-*` nos filtros e no menu.
@@ -63,5 +63,5 @@ Preencha em `src/config/site.ts`:
 - [ ] `contact.phone` e `contact.email`.
 - [ ] `store.address` e `store.location`: latitude e longitude da loja, com `configured: true`.
 - [ ] `url`: domínio definitivo.
-- [ ] Revise preços, descontos, extras e a frota em `src/data/cars.ts`. **Os valores atuais são exemplos.**
+- [ ] Revise a frota e as diárias em `src/data/cars.ts` e as regras do simulador em `src/config/simulador.ts`. **Itens marcados como EXEMPLO precisam ser conferidos.**
 - [ ] Revise as respostas das perguntas frequentes em `src/app/page.tsx` (documentos, idade mínima, devolução antecipada) conforme as regras reais da empresa.

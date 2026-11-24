@@ -80,4 +80,20 @@
 
 .leaflet-container {
   font-family: inherit;
+  /* Os panes/controles do Leaflet usam z-index 400–1000; isolar o mapa evita que passem por cima do header fixo (z-50). */
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+}
+
+/* "Baixar Orçamento em PDF" usa a impressão do navegador: só o orçamento vai para o papel. */
+@media print {
+  body > a,
+  body > header,
+  body > footer {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
 }

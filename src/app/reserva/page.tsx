@@ -4,14 +4,16 @@ import { PageHero } from "@/components/PageHero";
 import { BookingWizard } from "@/components/BookingWizard";
 
 export const metadata: Metadata = {
-  title: "Reserva",
-  description: "Simule e solicite sua reserva de carro em poucos passos.",
+  title: "Simule sua locação",
+  description: "Orçamento online em 2 minutos — sem cadastro, sem compromisso. Locação por diária ou mensal.",
 };
 
 export default function ReservaPage() {
   return (
     <>
-      <PageHero eyebrow="Reserva" title="Monte sua locação em 4 passos." text="Veja o valor estimado na hora e envie o pedido direto para o nosso WhatsApp." />
+      <div className="print:hidden">
+        <PageHero eyebrow="Simulador" title="Simule sua locação" text="Orçamento online em 2 minutos — sem cadastro, sem compromisso." />
+      </div>
       <Suspense fallback={<div className="container-x py-16 text-slate-500">Carregando…</div>}>
         <BookingWizard />
       </Suspense>

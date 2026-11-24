@@ -34,9 +34,11 @@ export default async function CarPage({ params }: Props) {
     { icon: Fuel, label: "Combustível", value: car.fuel },
   ];
   const plans = [
-    { label: "Diária", days: 1 },
-    { label: "Semanal", days: 7 },
-    { label: "Mensal", days: 30 },
+    { label: "1 a 2 diárias", days: 1 },
+    { label: "3 a 6 diárias", days: 3 },
+    { label: "7 a 14 diárias", days: 7 },
+    { label: "15 a 29 diárias", days: 15 },
+    { label: "30 diárias ou mais", days: 30 },
   ];
 
   return (

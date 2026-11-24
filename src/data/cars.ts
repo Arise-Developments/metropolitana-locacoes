@@ -21,6 +21,8 @@ export type Car = {
   doors: number;
   fuel: string;
   dailyRate: number;
+  /** Valor mensal próprio. Sem ele, o simulador usa diária × 30 × fatorMensal (src/config/simulador.ts). */
+  monthlyRate?: number;
   features: string[];
   highlight?: boolean;
 };
